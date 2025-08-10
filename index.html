@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Up! HBD [Nama Pacar Kamu]!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/css/lightgallery.min.css" />
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        html, body { 
+            font-family: 'Press Start 2P', cursive; 
+            background-color: #5C94FC;
+            color: #FFFFFF; 
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        #intro-screen {
+            position: fixed; 
+            width: 100%; 
+            height: 100%; 
+            background: #000; 
+            z-index: 100;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            transition: opacity 1.5s ease;
+        }
+        
+        .intro-text { 
+            display: none; 
+            text-align: center; 
+        }
+        
+        #exp-text { 
+            font-size: clamp(1.5rem, 5vw, 2.5rem); 
+        }
+        
+        #counter-text { 
+            font-size: clamp(3rem, 10vw, 6rem); 
+            color: #FBD000; 
+        }
+        
+        #warning-text { 
+            font-size: clamp(2rem, 8vw, 5rem); 
+            color: #E52521; 
+            animation: blinkWarning 0.5s steps(1) infinite; 
+        }
+        
+        #levelup-text { 
+            font-size: clamp(3rem, 10vw, 7rem); 
+            color: #90EE90; 
+            text-shadow: 0 0 20px #90EE90; 
+            animation: levelUpPulse 1s ease-in-out infinite; 
+        }
+        
+        @keyframes blinkWarning { 
+            50% { opacity: 0; } 
+        }
+        
+        @keyframes levelUpPulse { 
+            0%, 100% { transform: scale(1); } 
+            50% { transform: scale(1.1); } 
+        }
+
+        #particles-js { 
+            position: fixed; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 0; 
+            top: 0; 
+            left: 0; 
+            pointer-events: none;
+        }
+        
+        #main-content { 
+            display: none; 
+            position: relative; 
+            z-index: 1;
+            min-height: 100vh;
+            text-shadow: 2px 2px #000000;
+        }
+        
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            text-align: center; 
+        }
+        
+        header { 
+            min-height: 50vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding-top: 40px; 
+            text-align: center;
+        }
+        
+        h1 { 
+            font-size: clamp(2rem, 6vw, 2.5rem); 
+        }
+        
+        h2 { 
+            font-size: clamp(1.5rem, 5vw, 1.8rem); 
+            margin-top: 40px; 
+            margin-bottom: 20px; 
+            color: #FBD000; 
+        }
+        
+        p { 
+            font-size: clamp(0.8rem, 2vw, 0.9rem); 
+            max-width: 600px; 
+            margin: 10px auto; 
+            line-height: 1.8; 
+        }
+        
+        #gallery-container { 
+            margin-top: 30px; 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 15px; 
+        }
+        
+        #gallery-container a img { 
+            width: 100%; 
+            height: 150px; 
+            object-fit: cover; 
+            border-radius: 0; 
+            cursor: pointer; 
+            border: 4px solid #000; 
+            image-rendering: pixelated; 
+        }
+        
+        .block-section { 
+            background-color: rgba(217, 144, 88, 0.85); 
+            backdrop-filter: blur(2px); 
+            border: 4px solid #000; 
+            padding: 30px 20px; 
+            margin-top: 50px; 
+        }
+        
+        footer { 
+            margin-top: 60px; 
+            padding: 20px; 
+            font-size: 0.8rem; 
+            color: #fff; 
+        }
+        
+        #start-button {
+            background: #FBD000;
+            color: #000;
+            border: 4px solid #000;
+            padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 20px;
+            animation: blinkButton 1s steps(1) infinite;
+        }
+        
+        .achievement-item {
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #FBD000;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            animation: achievementPop 0.5s ease-out;
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        
+        .achievement-item.show {
+            transform: translateX(0);
+            opacity: 1;
+            transition: all 0.5s ease-out;
+        }
+        
+        @keyframes achievementPop {
+            0% { transform: translateX(100%) scale(0.8); opacity: 0; }
+            50% { transform: translateX(-10px) scale(1.05); }
+            100% { transform: translateX(0) scale(1); opacity: 1; }
+        }
+        
+        @keyframes blinkButton {
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <audio id="music" src="music.mp3" loop></audio>
+    <audio id="tick-sound" src="tick.mp3"></audio>
+    <audio id="levelup-sound" src="levelup.mp3"></audio>
+
+    <div id="intro-screen">
+        <div id="exp-text" class="intro-text">EXP GET</div>
+        <div id="counter-text" class="intro-text">0</div>
+        <div id="warning-text" class="intro-text">WARNING!</div>
+        <div id="levelup-text" class="intro-text">LEVEL UP!!</div>
+    </div>
+
+    <div id="main-content">
+        <div id="particles-js"></div>
+        <header>
+            <h1>LEVEL UP!<br>HBD NESTY ERMIN NADHIRAH<br>MY KISAH!<br>MY ISTRI!</h1>
+        </header>
+        <div class="container">
+            <section id="gallery-section">
+                <h2>⭐ PILIH LEVEL KENANGAN ⭐</h2>
+                <p>Setiap blok berisi Power-Up momen kita. Klik untuk lihat!</p>
+                <div id="gallery-container">
+                    <a href="FOTO-1.jpg" data-sub-html="<h4>LEVEL 1: Mini Player Era</h4><p>Waktu masih kecil, udah kelihatan main characternya!</p>">
+                        <img src="FOTO-1.jpg" alt="Foto TK 1">
+                    </a>
+                    <a href="FOTO-2.jpg" data-sub-html="<h4>LEVEL 2: Childhood Completed</h4><p>Tutorial mode selesai, siap upgrade ke level selanjutnya!</p>">
+                        <img src="FOTO-2.jpg" alt="Foto TK 2">
+                    </a>
+                    <a href="FOTO-3.jpg" data-sub-html="<h4>LEVEL 3: Co-op Mode Unlocked</h4><p>Achievement: Duo fotogenic activated!</p>">
+                        <img src="FOTO-3.jpg" alt="Foto Studio 1">
+                    </a>
+                    <a href="FOTO-4.jpg" data-sub-html="<h4>LEVEL 4: Perfect Chemistry</h4><p>Combo skill maxed out!</p>">
+                        <img src="FOTO-4.jpg" alt="Foto Studio 2">
+                    </a>
+                    <a href="FOTO-5.jpg" data-sub-html="<h4>LEVEL 5: Family Guild</h4><p>Special raid dengan party terkuat!</p>">
+                        <img src="FOTO-5.jpg" alt="Foto Keluarga">
+                    </a>
+                </div>
+            </section>
+            
+            <section class="block-section">
+                <h2>🍄 PESAN DARI PLAYER 1 🍄</h2>
+                <p>TO: My Kisah My Istri<br><br>
+                Selamat menambah XP kehidupan! Kamu sudah berhasil menyelesaikan level 22 dengan sangat baik. 
+                Semoga di level 23 ini, semua 'quest' dan 'misi' hidupmu jadi lebih mudah. 
+                Aku akan selalu jadi 'support' terbaikmu.<br><br>
+                <button id="start-button" onclick="startAchievements()">🎮 PRESS START TO CONTINUE 🎮</button></p>
+            </section>
+            
+            <section class="block-section" id="achievement-section" style="display: none;">
+                <h2>🎮 ACHIEVEMENT UNLOCKED 🎮</h2>
+                <div id="achievement-container">
+                    <div class="achievement-item" id="achievement-1" style="display: none;">
+                        <strong>📅 AGE PROGRESSION:</strong> Level 22 → Level 23
+                    </div>
+                    <div class="achievement-item" id="achievement-2" style="display: none;">
+                        <strong>🏆 LIFE STATS:</strong><br><br>
+                        • Wisdom +100<br>
+                        • Happiness +100<br>
+                        • Cuteness MAX<br>
+                        • Intelligence SUPERMAX<br>
+                        • Sexy SUPERMAX 😏<br>
+                        • Charm Level: LEGENDARY
+                    </div>
+                    <div class="achievement-item" id="achievement-3" style="display: none;">
+                        <strong>🎁 BIRTHDAY REWARDS:</strong> Unlimited Love Points, Lifetime Support Package
+                    </div>
+                    <div class="achievement-item" id="achievement-4" style="display: none;">
+                        <strong>💝 SPECIAL QUEST COMPLETE:</strong><br>
+                        "Find someone who sees your real value" ✅<br>
+                        "Build beautiful memories together" ✅<br>
+                        "Unlock level: Being Amazing Every Day" ✅
+                    </div>
+                    <div class="achievement-item" id="achievement-5" style="display: none;">
+                        <em>Next objective: Keep being the incredible person you are!</em>
+                    </div>
+                </div>
+            </section>
+            
+            <footer>
+                <p>Crafted by Player 1: Edwin</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/lightgallery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <script>
+        const introScreen = document.getElementById('intro-screen');
+        const mainContent = document.getElementById('main-content');
+        const music = document.getElementById('music');
+        const tickSound = document.getElementById('tick-sound');
+        const levelupSound = document.getElementById('levelup-sound');
+        
+        let audioInitialized = false;
+        
+        // Fungsi untuk inisialisasi audio dengan user interaction
+        function initializeAudio() {
+            if (!audioInitialized) {
+                music.volume = 0.5;
+                tickSound.volume = 0.7;
+                levelupSound.volume = 0.8;
+                
+                // Preload audio files
+                music.load();
+                tickSound.load();
+                levelupSound.load();
+                
+                audioInitialized = true;
+            }
+        }
+        
+        function show(id) { 
+            document.getElementById(id).style.display = 'block'; 
+        }
+        
+        function hide(id) { 
+            document.getElementById(id).style.display = 'none'; 
+        }
+        
+        function playAudio(audioElement) {
+            audioElement.currentTime = 0;
+            const playPromise = audioElement.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log('Audio played successfully');
+                }).catch(error => {
+                    console.log('Audio play failed:', error);
+                    // Jika gagal, coba play lagi setelah user interaction
+                    document.addEventListener('click', () => {
+                        audioElement.play().catch(e => console.log('Audio still failed:', e));
+                    }, { once: true });
+                });
+            }
+        }
+        
+        function numberCounter(el, start, end, duration, onComplete) {
+            let current = start;
+            const stepTime = Math.abs(Math.floor(duration / (end - start)));
+            
+            if (stepTime <= 0) {
+                el.textContent = end;
+                if (onComplete) onComplete();
+                return;
+            }
+            
+            const timer = setInterval(() => {
+                current += (start < end) ? 1 : -1;
+                el.textContent = current;
+                playAudio(tickSound);
+                
+                if (current === end) {
+                    clearInterval(timer);
+                    if (onComplete) onComplete();
+                }
+            }, stepTime);
+        }
+        
+        function runAnimationSequence() {
+            initializeAudio();
+            playAudio(music);
+            
+            const counterEl = document.getElementById('counter-text');
+            
+            setTimeout(() => { 
+                show('exp-text'); 
+            }, 500);
+            
+            setTimeout(() => {
+                hide('exp-text'); 
+                show('counter-text');
+                
+                numberCounter(counterEl, 0, 100, 1500, () => {
+                    setTimeout(() => {
+                        numberCounter(counterEl, 100, 22, 1500, () => {
+                            setTimeout(() => {
+                                hide('counter-text'); 
+                                show('warning-text');
+                                
+                                setTimeout(() => {
+                                    hide('warning-text'); 
+                                    show('levelup-text');
+                                    playAudio(levelupSound);
+                                    
+                                    setTimeout(() => {
+                                        introScreen.style.opacity = '0';
+                                        setTimeout(() => {
+                                            introScreen.style.display = 'none'; 
+                                            mainContent.style.display = 'block';
+                                        }, 1500);
+                                    }, 2500);
+                                }, 1500);
+                            }, 500);
+                        });
+                    }, 500);
+                });
+            }, 1500);
+        }
+        
+        // Tambahkan tombol untuk memulai dengan user interaction
+        function createStartButton() {
+            const startButton = document.createElement('button');
+            startButton.innerHTML = '🎮 KLIK UNTUK MULAI 🎮';
+            startButton.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: #FBD000;
+                color: #000;
+                border: 4px solid #000;
+                padding: 15px 30px;
+                font-family: 'Press Start 2P', cursive;
+                font-size: 1rem;
+                cursor: pointer;
+                animation: blinkButton 1s steps(1) infinite;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes blinkButton {
+                    50% { opacity: 0.7; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            startButton.addEventListener('click', () => {
+                startButton.remove();
+                runAnimationSequence();
+            });
+            
+            introScreen.appendChild(startButton);
+        }
+        
+        window.addEventListener('load', () => {
+            // Buat tombol start untuk memicu user interaction
+            createStartButton();
+            
+            // Initialize lightGallery
+            setTimeout(() => {
+                if (typeof lightGallery !== 'undefined') {
+                    lightGallery(document.getElementById('gallery-container'), { 
+                        speed: 300, 
+                        download: false 
+                    });
+                }
+            }, 10000);
+            
+            // Initialize particles
+            if (typeof tsParticles !== 'undefined') {
+                tsParticles.load("particles-js", {
+                    particles: {
+                        number: { value: 20 },
+                        shape: {
+                            type: "character",
+                            character: [
+                                { value: "🍄", font: "Verdana", style: "", weight: "400" }, 
+                                { value: "⭐", font: "Verdana", style: "", weight: "400" }, 
+                                { value: "💰", font: "Verdana", style: "", weight: "400" }
+                            ]
+                        },
+                        opacity: { value: 1 },
+                        size: { 
+                            value: 24, 
+                            random: { enable: true, minimumValue: 16 } 
+                        },
+                        move: { 
+                            enable: true, 
+                            speed: 3, 
+                            direction: "bottom", 
+                            straight: true, 
+                            outModes: { default: "out" } 
+                        }
+                    },
+                    detectRetina: true
+                });
+            }
+        });
+        
+        // Debug audio loading
+        music.addEventListener('loadeddata', () => console.log('Background music loaded'));
+        music.addEventListener('error', (e) => console.log('Background music error:', e));
+        levelupSound.addEventListener('loadeddata', () => console.log('Level up sound loaded'));
+        levelupSound.addEventListener('error', (e) => console.log('Level up sound error:', e));
+        tickSound.addEventListener('loadeddata', () => console.log('Tick sound loaded'));
+        tickSound.addEventListener('error', (e) => console.log('Tick sound error:', e));
+        
+        // Achievement system
+        function startAchievements() {
+            document.getElementById('start-button').style.display = 'none';
+            document.getElementById('achievement-section').style.display = 'block';
+            
+            const achievements = [
+                'achievement-1',
+                'achievement-2', 
+                'achievement-3',
+                'achievement-4',
+                'achievement-5'
+            ];
+            
+            achievements.forEach((id, index) => {
+                setTimeout(() => {
+                    const element = document.getElementById(id);
+                    element.style.display = 'block';
+                    playAudio(tickSound);
+                    
+                    setTimeout(() => {
+                        element.classList.add('show');
+                    }, 100);
+                }, index * 1000);
+            });
+        }
+    </script>
+</body>
+</html>
