@@ -3,205 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level Up! HBD MY KISAH!</title>
+    <title>Petualangan Romantis: Enhanced Edition</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/css/lightgallery.min.css" />
     <style>
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
+        :root {
+            --primary-bg: #5C94FC;
+            --text-light: #FFFFFF;
+            --text-dark: #000000;
+            --accent-yellow: #FBD000;
+            --platform-green: #2E8B57;
+            --platform-brown: #8B4513;
+            --coin-color: #FFD700;
+            --love-pink: #FF69B4;
         }
-        
-        html, body { 
-            font-family: 'Press Start 2P', cursive; 
-            background-color: #5C94FC;
-            color: #FFFFFF; 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: var(--primary-bg);
+            color: var(--text-light);
             height: 100%;
             overflow-x: hidden;
         }
 
+        /* --- Gaya Layar Intro --- */
         #intro-screen {
-            position: fixed; 
-            width: 100%; 
-            height: 100%; 
-            background: #000; 
-            z-index: 100;
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center;
+            position: fixed; width: 100%; height: 100%;
+            background: #000; z-index: 2000;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
             transition: opacity 1.5s ease;
         }
-        
-        .intro-text { 
-            display: none; 
-            text-align: center; 
+        .intro-text { display: none; text-align: center; }
+        #exp-text { font-size: clamp(1.5rem, 5vw, 2.5rem); }
+        #counter-text { font-size: clamp(3rem, 10vw, 6rem); color: var(--accent-yellow); }
+        #warning-text { font-size: clamp(2rem, 8vw, 5rem); color: #E52521; animation: blinkWarning 0.5s steps(1) infinite; }
+        #levelup-text { font-size: clamp(3rem, 10vw, 7rem); color: #90EE90; text-shadow: 0 0 20px #90EE90; animation: levelUpPulse 1s ease-in-out infinite; }
+        @keyframes blinkWarning { 50% { opacity: 0; } }
+        @keyframes levelUpPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        #start-intro-btn {
+            background: var(--accent-yellow); color: var(--text-dark);
+            border: 4px solid var(--text-dark); padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive; font-size: 1rem;
+            cursor: pointer; animation: blinkButton 1s steps(1) infinite;
         }
-        
-        #exp-text { 
-            font-size: clamp(1.5rem, 5vw, 2.5rem); 
-        }
-        
-        #counter-text { 
-            font-size: clamp(3rem, 10vw, 6rem); 
-            color: #FBD000; 
-        }
-        
-        #warning-text { 
-            font-size: clamp(2rem, 8vw, 5rem); 
-            color: #E52521; 
-            animation: blinkWarning 0.5s steps(1) infinite; 
-        }
-        
-        #levelup-text { 
-            font-size: clamp(3rem, 10vw, 7rem); 
-            color: #90EE90; 
-            text-shadow: 0 0 20px #90EE90; 
-            animation: levelUpPulse 1s ease-in-out infinite; 
-        }
-        
-        @keyframes blinkWarning { 
-            50% { opacity: 0; } 
-        }
-        
-        @keyframes levelUpPulse { 
-            0%, 100% { transform: scale(1); } 
-            50% { transform: scale(1.1); } 
-        }
+        @keyframes blinkButton { 50% { opacity: 0.7; } }
 
-        #particles-js { 
-            position: fixed; 
-            width: 100%; 
-            height: 100%; 
-            z-index: 0; 
-            top: 0; 
-            left: 0; 
-            pointer-events: none;
+        /* --- Gaya Konten Utama --- */
+        #main-content {
+            display: none; position: relative; z-index: 1;
+            min-height: 100vh; text-shadow: 2px 2px #000000;
+            overflow-y: auto; height: 100%;
         }
-        
-        #main-content { 
-            display: none; 
-            position: relative; 
-            z-index: 1;
-            min-height: 100vh;
-            text-shadow: 2px 2px #000000;
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; text-align: center; }
+        header { min-height: 30vh; display: flex; align-items: center; justify-content: center; padding-top: 40px; text-align: center; }
+        h1 { font-size: clamp(1.5rem, 5vw, 2.2rem); }
+        h2 { font-size: clamp(1.5rem, 5vw, 1.8rem); margin-top: 40px; margin-bottom: 20px; color: var(--accent-yellow); }
+        p { font-size: clamp(0.8rem, 2vw, 0.9rem); max-width: 600px; margin: 10px auto; line-height: 1.8; }
+        .block-section { background-color: rgba(217, 144, 88, 0.85); backdrop-filter: blur(2px); border: 4px solid var(--text-dark); padding: 30px 20px; margin-top: 50px; }
+
+        /* Gaya Achievement */
+        #start-achievement-button {
+            background: var(--accent-yellow); color: var(--text-dark);
+            border: 4px solid var(--text-dark); padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive; font-size: 0.8rem;
+            cursor: pointer; animation: blinkButton 1s steps(1) infinite;
         }
-        
-        .container { 
-            max-width: 900px; 
-            margin: 0 auto; 
-            padding: 40px 20px; 
-            text-align: center; 
-        }
-        
-        header { 
-            min-height: 50vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding-top: 40px; 
-            text-align: center;
-        }
-        
-        h1 { 
-            font-size: clamp(2rem, 6vw, 2.5rem); 
-        }
-        
-        h2 { 
-            font-size: clamp(1.5rem, 5vw, 1.8rem); 
-            margin-top: 40px; 
-            margin-bottom: 20px; 
-            color: #FBD000; 
-        }
-        
-        p { 
-            font-size: clamp(0.8rem, 2vw, 0.9rem); 
-            max-width: 600px; 
-            margin: 10px auto; 
-            line-height: 1.8; 
-        }
-        
-        #gallery-container { 
-            margin-top: 30px; 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
-            gap: 15px; 
-        }
-        
-        #gallery-container a img { 
-            width: 100%; 
-            height: 150px; 
-            object-fit: cover; 
-            border-radius: 0; 
-            cursor: pointer; 
-            border: 4px solid #000; 
-            image-rendering: pixelated; 
-        }
-        
-        .block-section { 
-            background-color: rgba(217, 144, 88, 0.85); 
-            backdrop-filter: blur(2px); 
-            border: 4px solid #000; 
-            padding: 30px 20px; 
-            margin-top: 50px; 
-        }
-        
-        footer { 
-            margin-top: 60px; 
-            padding: 20px; 
-            font-size: 0.8rem; 
-            color: #fff; 
-        }
-        
-        #start-button {
-            background: #FBD000;
-            color: #000;
-            border: 4px solid #000;
-            padding: 15px 30px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.8rem;
-            cursor: pointer;
-            margin-top: 20px;
-            animation: blinkButton 1s steps(1) infinite;
-        }
-        
         .achievement-item {
-            background: rgba(0, 0, 0, 0.8);
-            border: 3px solid #FBD000;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            animation: achievementPop 0.5s ease-out;
-            transform: translateX(100%);
-            opacity: 0;
+            background: rgba(0, 0, 0, 0.8); border: 3px solid var(--accent-yellow);
+            padding: 15px; margin: 10px 0; border-radius: 8px;
+            transform: translateX(100%); opacity: 0;
+            text-align: left;
         }
-        
         .achievement-item.show {
-            transform: translateX(0);
-            opacity: 1;
+            transform: translateX(0); opacity: 1;
             transition: all 0.5s ease-out;
         }
-        
-        @keyframes achievementPop {
-            0% { transform: translateX(100%) scale(0.8); opacity: 0; }
-            50% { transform: translateX(-10px) scale(1.05); }
-            100% { transform: translateX(0) scale(1); opacity: 1; }
+
+        #bonus-level-btn {
+            background: linear-gradient(45deg, #FF69B4, #FF1493); color: #fff;
+            border: 4px solid var(--text-dark); padding: 15px 25px;
+            font-family: 'Press Start 2P', cursive; font-size: 0.8rem;
+            cursor: pointer; margin-top: 30px; text-shadow: 2px 2px var(--text-dark);
         }
-        
-        @keyframes blinkButton {
-            50% { opacity: 0.7; }
+        footer { margin-top: 60px; padding: 20px; font-size: 0.8rem; }
+
+        /* --- Gaya Game --- */
+        #game-container {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh; background: #000;
+            z-index: 1000; overflow: hidden;
+        }
+        #game-canvas { display: block; image-rendering: pixelated; }
+        #game-ui {
+            position: absolute; top: 15px; left: 15px; right: 15px;
+            color: var(--text-light); font-size: clamp(0.7rem, 2.5vw, 1rem);
+            text-shadow: 2px 2px var(--text-dark); z-index: 1001;
+            display: flex; justify-content: space-between;
+        }
+        #mobile-controls {
+            position: absolute; bottom: 20px; left: 50%;
+            transform: translateX(-50%); display: none;
+            gap: 20px; z-index: 1001;
+        }
+        .control-btn {
+            background: rgba(251, 208, 0, 0.8); border: 3px solid var(--text-dark);
+            border-radius: 50%; width: 60px; height: 60px;
+            font-family: 'Press Start 2P', cursive; font-size: 1.2rem;
+            color: var(--text-dark); cursor: pointer; user-select: none;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .control-btn:active { background: var(--accent-yellow); transform: scale(0.95); }
+        #game-message-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); display: none;
+            align-items: center; justify-content: center; z-index: 1002;
+        }
+        #game-message-box {
+            background: rgba(0, 0, 0, 0.9); color: var(--text-light);
+            padding: 30px; border: 4px solid var(--accent-yellow);
+            text-align: center; min-width: 320px; max-width: 90%;
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        .game-button {
+            background: var(--accent-yellow); color: var(--text-dark);
+            border: 4px solid var(--text-dark); padding: 12px 24px;
+            font-family: 'Press Start 2P', cursive; font-size: 0.7rem;
+            cursor: pointer; margin: 10px 5px; transition: transform 0.2s;
+        }
+        .game-button:hover { transform: scale(1.05); }
+
+        /* Post Credit Scene */
+        #post-credit-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #FF69B4, #FF1493, #9932CC);
+            display: none; align-items: center; justify-content: center;
+            z-index: 3000; animation: gradientShift 3s ease-in-out infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background: linear-gradient(45deg, #FF69B4, #FF1493, #9932CC); }
+            50% { background: linear-gradient(45deg, #9932CC, #FF69B4, #FF1493); }
+        }
+        .post-credit-content {
+            text-align: center; color: white; text-shadow: 2px 2px black;
+            animation: floatText 2s ease-in-out infinite;
+        }
+        @keyframes floatText {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .heart-rain {
+            position: absolute; top: -50px; font-size: 2rem;
+            animation: heartFall 4s linear infinite;
+            opacity: 0.8;
+        }
+        @keyframes heartFall {
+            to { transform: translateY(120vh) rotate(360deg); }
+        }
+        @media (max-width: 768px) { #mobile-controls { display: flex; } }
+
+        /* Final Stage Specific */
+        .boss-hp-bar {
+            position: absolute; top: 50px; left: 50%;
+            transform: translateX(-50%); width: 400px; height: 20px;
+            background: rgba(0,0,0,0.8); border: 2px solid white;
+            z-index: 1001;
+        }
+        .boss-hp-fill {
+            height: 100%; background: linear-gradient(90deg, red, orange, yellow);
+            transition: width 0.3s ease;
+        }
+        .dialogue-box {
+            position: absolute; bottom: 80px; left: 50%;
+            transform: translateX(-50%); background: rgba(0,0,0,0.9);
+            color: white; padding: 20px; border: 3px solid yellow;
+            max-width: 80%; text-align: center; font-size: 0.8rem;
+            z-index: 1001; animation: dialoguePulse 1s ease-in-out infinite;
+        }
+        @keyframes dialoguePulse { 0%, 100% { opacity: 0.9; } 50% { opacity: 1; } }
+
+        /* Achievement Popup */
+        #achievement-popup {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.95); color: white; padding: 30px;
+            border: 4px solid var(--accent-yellow); z-index: 4000;
+            display: none; text-align: center; max-width: 90%; max-height: 90%;
+            overflow-y: auto;
+        }
+        #achievement-popup h2 { color: var(--accent-yellow); margin-bottom: 20px; }
+        #achievement-popup .achievement-item {
+            background: rgba(255,255,255,0.1); margin: 15px 0;
+            transform: none; opacity: 1;
+        }
+
+        /* Kamehameha Battle UI */
+        #kamehameha-ui {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); display: none; z-index: 1003;
+            align-items: center; justify-content: center; flex-direction: column;
+        }
+        .power-bar-container {
+            width: 80%; max-width: 600px; height: 40px;
+            background: rgba(255,255,255,0.2); border: 3px solid white;
+            margin: 20px 0; position: relative; overflow: hidden;
+        }
+        .power-bar {
+            height: 100%; transition: width 0.1s ease;
+        }
+        .power-bar.player { background: linear-gradient(90deg, #ff69b4, #ff1493, #dc143c); }
+        .power-bar.boss { background: linear-gradient(90deg, #800080, #4b0082, #000000); }
+        #kamehameha-instruction {
+            color: white; font-size: 1.2rem; text-align: center;
+            animation: pulseInstruction 1s ease-in-out infinite;
+            margin-bottom: 30px;
+        }
+        @keyframes pulseInstruction {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* Laser Effects */
+        .laser-beam {
+            position: absolute; height: 4px; background: #00ff00;
+            z-index: 999; animation: laserPulse 0.3s ease-in-out;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        @keyframes laserPulse {
+            0% { opacity: 0; transform: scaleX(0); }
+            100% { opacity: 1; transform: scaleX(1); }
+        }
+
+        /* Kamehameha Beam Effects */
+        .kamehameha-beam {
+            position: absolute; height: 30px; z-index: 998;
+            box-shadow: 0 0 30px currentColor; animation: beamPower 0.5s ease-in-out;
+        }
+        .kamehameha-beam.player {
+            background: linear-gradient(90deg, #ff69b4, #ff1493);
+            color: #ff69b4;
+        }
+        .kamehameha-beam.boss {
+            background: linear-gradient(90deg, #800080, #4b0082);
+            color: #800080;
+        }
+        @keyframes beamPower {
+            0% { opacity: 0.5; transform: scaleY(0.5); }
+            50% { opacity: 1; transform: scaleY(1.2); }
+            100% { opacity: 0.8; transform: scaleY(1); }
+        }
+
+        /* Edwin Low Health Effect */
+        .edwin-hurt {
+            animation: hurtFlash 0.5s ease-in-out infinite;
+        }
+        @keyframes hurtFlash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; filter: brightness(0.5); }
+        }
+
+        /* Kiss Effect */
+        .kiss-effect {
+            position: absolute; font-size: 2rem; color: #ff69b4;
+            animation: kissFloat 2s ease-out; z-index: 1000; pointer-events: none;
+        }
+        @keyframes kissFloat {
+            0% { opacity: 0; transform: scale(0.5) translateY(0); }
+            30% { opacity: 1; transform: scale(1.2) translateY(-20px); }
+            100% { opacity: 0; transform: scale(0.8) translateY(-60px); }
         }
     </style>
 </head>
 <body>
-    <audio id="music" src="music.mp3" loop></audio>
-    <audio id="tick-sound" src="tick.mp3"></audio>
-    <audio id="levelup-sound" src="levelup.mp3"></audio>
+    <!-- Audio Elements -->
+    <audio id="background-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="levelup-sound">
+        <source src="levelup.mp3" type="audio/mpeg">
+    </audio>
 
     <div id="intro-screen">
+        <button id="start-intro-btn">🎮 KLIK UNTUK MULAI 🎮</button>
         <div id="exp-text" class="intro-text">EXP GET</div>
         <div id="counter-text" class="intro-text">0</div>
         <div id="warning-text" class="intro-text">WARNING!</div>
@@ -209,42 +297,19 @@
     </div>
 
     <div id="main-content">
-        <div id="particles-js"></div>
-        <header>
-            <h1>LEVEL UP!<br>HBD NESTY ERMIN NADHIRAH<br>MY KISAH!<br>MY ISTRI!</h1>
-        </header>
         <div class="container">
-            <section id="gallery-section">
-                <h2>⭐ PILIH LEVEL KENANGAN ⭐</h2>
-                <p>Setiap blok berisi Power-Up momen kita. Klik untuk lihat!</p>
-                <div id="gallery-container">
-                    <a href="FOTO-1.jpg" data-sub-html="<h4>LEVEL 1: Mini Player Era</h4><p>Waktu masih kecil, udah kelihatan main characternya!</p>">
-                        <img src="FOTO-1.jpg" alt="Foto TK 1">
-                    </a>
-                    <a href="FOTO-2.jpg" data-sub-html="<h4>LEVEL 2: Childhood Completed</h4><p>Tutorial mode selesai, siap upgrade ke level selanjutnya!</p>">
-                        <img src="FOTO-2.jpg" alt="Foto TK 2">
-                    </a>
-                    <a href="FOTO-3.jpg" data-sub-html="<h4>LEVEL 3: Co-op Mode Unlocked</h4><p>Achievement: Duo fotogenic activated!</p>">
-                        <img src="FOTO-3.jpg" alt="Foto Studio 1">
-                    </a>
-                    <a href="FOTO-4.jpg" data-sub-html="<h4>LEVEL 4: Perfect Chemistry</h4><p>Combo skill maxed out!</p>">
-                        <img src="FOTO-4.jpg" alt="Foto Studio 2">
-                    </a>
-                    <a href="FOTO-5.jpg" data-sub-html="<h4>LEVEL 5: Family Guild</h4><p>Special raid dengan party terkuat!</p>">
-                        <img src="FOTO-5.jpg" alt="Foto Keluarga">
-                    </a>
-                </div>
-            </section>
-            
+            <header>
+                <h1>LEVEL UP!<br>HBD NESTY ERMIN NADHIRAH<br>MY KISAH!<br>MY ISTRI!</h1>
+            </header>
             <section class="block-section">
                 <h2>🍄 PESAN DARI PLAYER 1 🍄</h2>
                 <p>TO: My Kisah My Istri<br><br>
-                Selamat menambah XP kehidupan! Kamu sudah berhasil menyelesaikan level 22 dengan sangat baik. 
-                Semoga di level 23 ini, semua 'quest' dan 'misi' hidupmu jadi lebih mudah. 
+                Selamat menambah XP kehidupan! Kamu sudah berhasil menyelesaikan level 22 dengan sangat baik.
+                Semoga di level 23 ini, semua 'quest' dan 'misi' hidupmu jadi lebih mudah.
                 Aku akan selalu jadi 'support' terbaikmu.<br><br>
-                <button id="start-button" onclick="startAchievements()">🎮 PRESS START TO CONTINUE 🎮</button></p>
+                <button id="start-achievement-button">🎮 LIHAT STATS BARU-MU 🎮</button>
             </section>
-            
+
             <section class="block-section" id="achievement-section" style="display: none;">
                 <h2>🎮 ACHIEVEMENT UNLOCKED 🎮</h2>
                 <div id="achievement-container">
@@ -274,242 +339,764 @@
                     </div>
                 </div>
             </section>
-            
+
+            <section class="block-section" id="bonus-level-section" style="display: none;">
+                <h2>🎮 BONUS LEVEL 🎮</h2>
+                <p>Sebagai hadiah, aku sudah siapkan game petualangan spesial untukmu. Selesaikan semua levelnya!</p>
+                <button id="bonus-level-btn" onclick="preloadAndStartGame()">💕 MULAI PETUALANGAN 💕</button>
+            </section>
             <footer>
-                <p>Crafted by Player 1: Edwin</p>
+                <p>Crafted with ❤️ by Player 1: Edwin</p>
             </footer>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/lightgallery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <div id="game-container">
+        <div id="game-ui">
+            <div>SKOR: <span id="score">0</span></div>
+            <div>LEVEL: <span id="level">1</span></div>
+            <div>NYAWA: <span id="lives">3</span></div>
+            <div>KOIN: <span id="coins-collected">0</span>/<span id="total-coins">0</span></div>
+        </div>
+        <div id="boss-hp-container" style="display: none;">
+            <div class="boss-hp-bar">
+                <div class="boss-hp-fill" id="boss-hp-fill"></div>
+            </div>
+        </div>
+        <div id="dialogue-container"></div>
+        <canvas id="game-canvas"></canvas>
+        <div id="mobile-controls">
+            <button class="control-btn" id="left-btn">◀</button>
+            <button class="control-btn" id="jump-btn">▲</button>
+            <button class="control-btn" id="right-btn">▶</button>
+        </div>
+        <div id="game-message-overlay">
+            <div id="game-message-box">
+                <div id="message-text"></div>
+                <div>
+                    <button id="primary-action-btn" class="game-button"></button>
+                    <button id="main-menu-btn" class="game-button">MENU UTAMA</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kamehameha Battle UI -->
+        <div id="kamehameha-ui">
+            <div id="kamehameha-instruction">
+                TEKAN SPACE ATAU TAP LAYAR SECEPAT MUNGKIN!<br>
+                KALAHKAN BOSS DENGAN KEKUATAN CINTA! 💕
+            </div>
+            <div>
+                <div style="color: #ff69b4; font-size: 1rem; margin-bottom: 10px;">NESTY & EDWIN</div>
+                <div class="power-bar-container">
+                    <div class="power-bar player" id="player-power-bar"></div>
+                </div>
+            </div>
+            <div>
+                <div style="color: #800080; font-size: 1rem; margin-bottom: 10px;">BOSS</div>
+                <div class="power-bar-container">
+                    <div class="power-bar boss" id="boss-power-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="post-credit-screen">
+        <div class="post-credit-content">
+            <h1 style="font-size: 2.5rem; margin-bottom: 30px;">💝 SPECIAL MESSAGE 💝</h1>
+            <p style="font-size: 1.2rem; line-height: 2; max-width: 800px;">
+                "Seperti di game ini, hidup kita penuh dengan level yang harus diselesaikan bersama.<br><br>
+                Kamu bukan hanya player 2 dalam hidupku,<br>
+                tapi kamu adalah alasan kenapa game ini jadi menyenangkan.<br><br>
+                Happy Level 23, My Amazing Co-Player! �❤️"
+            </p>
+            <button id="back-to-main" class="game-button" style="margin-top: 30px; font-size: 1rem;">
+                KEMBALI KE MENU
+            </button>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div id="achievement-popup">
+        <h2>🎮 FINAL ACHIEVEMENT UNLOCKED 🎮</h2>
+        <div class="achievement-item">
+            <strong>📅 AGE PROGRESSION:</strong> Level 22 → Level 23
+        </div>
+        <div class="achievement-item">
+            <strong>🏆 LIFE STATS:</strong><br><br>
+            • Wisdom +100<br>
+            • Happiness +100<br>
+            • Cuteness MAX<br>
+            • Intelligence SUPERMAX<br>
+            • Sexy SUPERMAX 😏<br>
+            • Charm Level: LEGENDARY
+        </div>
+        <div class="achievement-item">
+            <strong>🎁 BIRTHDAY REWARDS:</strong> Unlimited Love Points, Lifetime Support Package
+        </div>
+        <div class="achievement-item">
+            <strong>💝 SPECIAL QUEST COMPLETE:</strong><br>
+            "Find someone who sees your real value" ✅<br>
+            "Build beautiful memories together" ✅<br>
+            "Unlock level: Being Amazing Every Day" ✅
+        </div>
+        <div class="achievement-item">
+            <em>Next objective: Keep being the incredible person you are!</em>
+        </div>
+        <button id="close-achievement" class="game-button" style="margin-top: 20px;">
+            TERIMA KASIH! 💕
+        </button>
+    </div>
+
     <script>
+        // === SKRIP INTRO & KONTEN UTAMA ===
         const introScreen = document.getElementById('intro-screen');
+        const startIntroBtn = document.getElementById('start-intro-btn');
         const mainContent = document.getElementById('main-content');
-        const music = document.getElementById('music');
-        const tickSound = document.getElementById('tick-sound');
+        const startAchievementBtn = document.getElementById('start-achievement-button');
+        const backgroundMusic = document.getElementById('background-music');
         const levelupSound = document.getElementById('levelup-sound');
-        
-        let audioInitialized = false;
-        
-        // Fungsi untuk inisialisasi audio dengan user interaction
-        function initializeAudio() {
-            if (!audioInitialized) {
-                music.volume = 0.5;
-                tickSound.volume = 0.7;
-                levelupSound.volume = 0.8;
-                
-                // Preload audio files
-                music.load();
-                tickSound.load();
-                levelupSound.load();
-                
-                audioInitialized = true;
-            }
-        }
-        
-        function show(id) { 
-            document.getElementById(id).style.display = 'block'; 
-        }
-        
-        function hide(id) { 
-            document.getElementById(id).style.display = 'none'; 
-        }
-        
-        function playAudio(audioElement) {
-            audioElement.currentTime = 0;
-            const playPromise = audioElement.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    console.log('Audio played successfully');
-                }).catch(error => {
-                    console.log('Audio play failed:', error);
-                    // Jika gagal, coba play lagi setelah user interaction
-                    document.addEventListener('click', () => {
-                        audioElement.play().catch(e => console.log('Audio still failed:', e));
-                    }, { once: true });
-                });
-            }
-        }
-        
+        const postCreditScreen = document.getElementById('post-credit-screen');
+        const achievementPopup = document.getElementById('achievement-popup');
+        const kamehamehaUI = document.getElementById('kamehameha-ui');
+
+        function show(id) { document.getElementById(id).style.display = 'block'; }
+        function hide(id) { document.getElementById(id).style.display = 'none'; }
+
         function numberCounter(el, start, end, duration, onComplete) {
             let current = start;
             const stepTime = Math.abs(Math.floor(duration / (end - start)));
-            
-            if (stepTime <= 0) {
-                el.textContent = end;
-                if (onComplete) onComplete();
-                return;
-            }
-            
+            if (stepTime <= 0) { el.textContent = end; if (onComplete) onComplete(); return; }
             const timer = setInterval(() => {
                 current += (start < end) ? 1 : -1;
                 el.textContent = current;
-                playAudio(tickSound);
-                
-                if (current === end) {
-                    clearInterval(timer);
-                    if (onComplete) onComplete();
-                }
+                if (current === end) { clearInterval(timer); if (onComplete) onComplete(); }
             }, stepTime);
         }
-        
-        function runAnimationSequence() {
-            initializeAudio();
-            playAudio(music);
-            
+
+        function playBackgroundMusic() {
+            backgroundMusic.currentTime = 0;
+            backgroundMusic.play().catch(e => console.log('Audio autoplay prevented'));
+        }
+
+        function playLevelUpSound() {
+            levelupSound.currentTime = 0;
+            levelupSound.play().catch(e => console.log('Audio autoplay prevented'));
+        }
+
+        function createHeartRain() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-rain';
+                    heart.textContent = ['💖', '💕', '💝', '💗', '💘'][Math.floor(Math.random() * 5)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    postCreditScreen.appendChild(heart);
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 200);
+            }
+        }
+
+        startIntroBtn.addEventListener('click', () => {
+            startIntroBtn.style.display = 'none';
+            playBackgroundMusic();
             const counterEl = document.getElementById('counter-text');
-            
-            setTimeout(() => { 
-                show('exp-text'); 
-            }, 500);
-            
+            setTimeout(() => { show('exp-text'); }, 500);
             setTimeout(() => {
-                hide('exp-text'); 
-                show('counter-text');
-                
-                numberCounter(counterEl, 0, 100, 1500, () => {
+                hide('exp-text'); show('counter-text');
+                numberCounter(counterEl, 0, 22, 1500, () => {
                     setTimeout(() => {
-                        numberCounter(counterEl, 100, 22, 1500, () => {
+                        hide('counter-text'); show('warning-text');
+                        setTimeout(() => {
+                            hide('warning-text'); show('levelup-text');
+                            playLevelUpSound();
                             setTimeout(() => {
-                                hide('counter-text'); 
-                                show('warning-text');
-                                
+                                introScreen.style.opacity = '0';
                                 setTimeout(() => {
-                                    hide('warning-text'); 
-                                    show('levelup-text');
-                                    playAudio(levelupSound);
-                                    
-                                    setTimeout(() => {
-                                        introScreen.style.opacity = '0';
-                                        setTimeout(() => {
-                                            introScreen.style.display = 'none'; 
-                                            mainContent.style.display = 'block';
-                                        }, 1500);
-                                    }, 2500);
+                                    introScreen.style.display = 'none';
+                                    mainContent.style.display = 'block';
                                 }, 1500);
-                            }, 500);
-                        });
+                            }, 2500);
+                        }, 1500);
                     }, 500);
                 });
             }, 1500);
-        }
-        
-        // Tambahkan tombol untuk memulai dengan user interaction
-        function createStartButton() {
-            const startButton = document.createElement('button');
-            startButton.innerHTML = '🎮 KLIK UNTUK MULAI 🎮';
-            startButton.style.cssText = `
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: #FBD000;
-                color: #000;
-                border: 4px solid #000;
-                padding: 15px 30px;
-                font-family: 'Press Start 2P', cursive;
-                font-size: 1rem;
-                cursor: pointer;
-                animation: blinkButton 1s steps(1) infinite;
-            `;
-            
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes blinkButton {
-                    50% { opacity: 0.7; }
-                }
-            `;
-            document.head.appendChild(style);
-            
-            startButton.addEventListener('click', () => {
-                startButton.remove();
-                runAnimationSequence();
-            });
-            
-            introScreen.appendChild(startButton);
-        }
-        
-        window.addEventListener('load', () => {
-            // Buat tombol start untuk memicu user interaction
-            createStartButton();
-            
-            // Initialize lightGallery
-            setTimeout(() => {
-                if (typeof lightGallery !== 'undefined') {
-                    lightGallery(document.getElementById('gallery-container'), { 
-                        speed: 300, 
-                        download: false 
-                    });
-                }
-            }, 10000);
-            
-            // Initialize particles
-            if (typeof tsParticles !== 'undefined') {
-                tsParticles.load("particles-js", {
-                    particles: {
-                        number: { value: 20 },
-                        shape: {
-                            type: "character",
-                            character: [
-                                { value: "🍄", font: "Verdana", style: "", weight: "400" }, 
-                                { value: "⭐", font: "Verdana", style: "", weight: "400" }, 
-                                { value: "💰", font: "Verdana", style: "", weight: "400" }
-                            ]
-                        },
-                        opacity: { value: 1 },
-                        size: { 
-                            value: 24, 
-                            random: { enable: true, minimumValue: 16 } 
-                        },
-                        move: { 
-                            enable: true, 
-                            speed: 3, 
-                            direction: "bottom", 
-                            straight: true, 
-                            outModes: { default: "out" } 
-                        }
-                    },
-                    detectRetina: true
-                });
-            }
-        });
-        
-        // Debug audio loading
-        music.addEventListener('loadeddata', () => console.log('Background music loaded'));
-        music.addEventListener('error', (e) => console.log('Background music error:', e));
-        levelupSound.addEventListener('loadeddata', () => console.log('Level up sound loaded'));
-        levelupSound.addEventListener('error', (e) => console.log('Level up sound error:', e));
-        tickSound.addEventListener('loadeddata', () => console.log('Tick sound loaded'));
-        tickSound.addEventListener('error', (e) => console.log('Tick sound error:', e));
-        
-        // Achievement system
-        function startAchievements() {
-            document.getElementById('start-button').style.display = 'none';
+        }, { once: true });
+
+        startAchievementBtn.addEventListener('click', () => {
+            startAchievementBtn.style.display = 'none';
             document.getElementById('achievement-section').style.display = 'block';
-            
-            const achievements = [
-                'achievement-1',
-                'achievement-2', 
-                'achievement-3',
-                'achievement-4',
-                'achievement-5'
-            ];
-            
+            const achievements = ['achievement-1', 'achievement-2', 'achievement-3', 'achievement-4', 'achievement-5'];
             achievements.forEach((id, index) => {
                 setTimeout(() => {
                     const element = document.getElementById(id);
                     element.style.display = 'block';
-                    playAudio(tickSound);
-                    
-                    setTimeout(() => {
-                        element.classList.add('show');
-                    }, 100);
+                    setTimeout(() => element.classList.add('show'), 100);
                 }, index * 1000);
             });
+            setTimeout(() => {
+                document.getElementById('bonus-level-section').style.display = 'block';
+            }, achievements.length * 1000);
+        });
+
+        document.getElementById('back-to-main').addEventListener('click', () => {
+            postCreditScreen.style.display = 'none';
+            mainContent.style.display = 'block';
+        });
+
+        document.getElementById('close-achievement').addEventListener('click', () => {
+            achievementPopup.style.display = 'none';
+            setTimeout(() => {
+                postCreditScreen.style.display = 'flex';
+                createHeartRain();
+            }, 500);
+        });
+
+        // === KODE GAME DIMULAI ===
+        const gameContainer = document.getElementById('game-container');
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Elemen UI
+        const scoreEl = document.getElementById('score');
+        const levelEl = document.getElementById('level');
+        const livesEl = document.getElementById('lives');
+        const coinsCollectedEl = document.getElementById('coins-collected');
+        const totalCoinsEl = document.getElementById('total-coins');
+        const messageOverlay = document.getElementById('game-message-overlay');
+        const messageText = document.getElementById('message-text');
+        const primaryActionBtn = document.getElementById('primary-action-btn');
+        const mainMenuBtn = document.getElementById('main-menu-btn');
+        const bossHpContainer = document.getElementById('boss-hp-container');
+        const bossHpFill = document.getElementById('boss-hp-fill');
+        const dialogueContainer = document.getElementById('dialogue-container');
+
+        // Aset Game (Gambar)
+        let nestyImg = new Image();
+        let edwinImg = new Image();
+        let imagesLoaded = 0;
+        let totalImages = 2;
+
+        // Status Game
+        let player, platforms, coins, enemies, allies = [];
+        let keys = {};
+        let gravity = 0.9;
+        let currentLevel = 0;
+        let gameScore = 0;
+        let gameLives = 3;
+        let gameState = 'inactive';
+        let gameAnimationId;
+        let boss = null;
+        let dialogues = [];
+        let currentDialogue = 0;
+        let finalStageStep = 0; // 0: Intro, 1: Unused, 2: Battle, 3: Edwin Hurt, 4: Kiss Scene, 5: Kamehameha, 6: Victory
+        let dialogueTimer = 0;
+        let edwinHp = 100;
+        let kamehamehaActive = false;
+        let playerPower = 0;
+        let bossPower = 50;
+        let kamehamehaTimer = 0;
+        let kamehamehaBeams = {};
+
+        // --- DESAIN LEVEL ---
+        const levels = [
+            // Stage 1-5 (Regular stages)
+            {
+                platforms: [ { x: 200, y: -150, width: 150 }, { x: 450, y: -250, width: 150 }, { x: 700, y: -200, width: 200 }, { x: 1000, y: -300, width: 100 } ],
+                coins: [ { x: 250, y: -200 }, { x: 500, y: -300 }, { x: 780, y: -250 } ],
+                enemies: [ { x: 400, y: -40, speed: 2 }, { x: 800, y: -40, speed: -2 } ]
+            },
+            {
+                platforms: [ { x: 150, y: -150, width: 100 }, { x: 350, y: -250, width: 100 }, { x: 550, y: -200, width: 100 }, { x: 750, y: -300, width: 100 }, { x: 950, y: -180, width: 100 }, { x: 1150, y: -280, width: 100 } ],
+                coins: [ { x: 180, y: -200 }, { x: 400, y: -300 }, { x: 780, y: -350 }, { x: 1180, y: -330 } ],
+                enemies: [ { x: 200, y: -40, speed: 2.5 }, { x: 600, y: -40, speed: -2.5 }, { x: 1000, y: -40, speed: 2.5 } ]
+            },
+            {
+                platforms: [ { x: 200, y: -150, width: 80 }, { x: 400, y: -200, width: 80 }, { x: 600, y: -250, width: 80 }, { x: 800, y: -300, width: 80 }, { x: 500, y: -400, width: 150 } ],
+                coins: [ { x: 220, y: -200 }, { x: 620, y: -300 }, { x: 550, y: -450 } ],
+                enemies: [ { x: 300, y: -40, speed: 3 }, { x: 700, y: -40, speed: -3 }, { x: 10, y: -40, speed: 3 } ]
+            },
+            {
+                platforms: [ { x: 100, y: -150, width: 100 }, { x: 300, y: -250, width: 100 }, { x: 100, y: -350, width: 100 }, { x: 300, y: -450, width: 100 }, { x: 600, y: -450, width: 250 }, { x: 1000, y: -350, width: 100 }, { x: 1200, y: -250, width: 100 } ],
+                coins: [ { x: 150, y: -400 }, { x: 700, y: -500 }, { x: 1250, y: -300 }, { x: 10, y: -500 } ],
+                enemies: [ { x: 700, y: -500, speed: 3.5 }, { x: 100, y: -40, speed: -3 }, { x: 400, y: -40, speed: 3 } ]
+            },
+            {
+                platforms: [ { x: 150, y: -150, width: 70 }, { x: 300, y: -220, width: 70 }, { x: 450, y: -180, width: 70 }, { x: 600, y: -250, width: 70 }, { x: 750, y: -320, width: 70 }, { x: 900, y: -280, width: 70 }, { x: 1050, y: -350, width: 70 }, { x: 1200, y: -420, width: 70 } ],
+                coins: [ { x: 180, y: -200 }, { x: 480, y: -230 }, { x: 780, y: -370 }, { x: 1080, y: -400 }, { x: 1230, y: -470 } ],
+                enemies: [ { x: 200, y: -40, speed: 4 }, { x: 500, y: -40, speed: -4 }, { x: 800, y: -40, speed: 4 }, { x: 1100, y: -40, speed: -4 } ]
+            },
+            // FINAL STAGE
+            {
+                type: 'final',
+                platforms: [ { x: 200, y: -100, width: 200 }, { x: 600, y: -100, width: 200 }, { x: 1000, y: -100, width: 200 } ],
+                coins: [],
+                enemies: [],
+                boss: { x: 1100, y: -200, width: 80, height: 80, hp: 100, maxHp: 100 },
+                ally: { x: 300, y: -200, width: 40, height: 50 }
+            }
+        ];
+
+        // Final Stage Dialogues
+        const finalDialogues = [
+            { speaker: "Nesty", text: "Edwin, ini musuh terakhir! Aku takut..." },
+            { speaker: "Edwin", text: "Jangan khawatir sayang, kita bisa mengalahkannya bersama!" },
+            { speaker: "Boss", text: "Kalian tidak akan pernah bisa mengalahkanku!" },
+            { speaker: "Edwin", text: "Aku akan melindungimu dengan segenap kekuatanku!" },
+            { speaker: "Nesty", text: "Hati-hati Edwin! Jangan sampai terluka!" }
+        ];
+
+        const criticalDialogues = [
+            { speaker: "Edwin", text: "Argh! Kekuatanku hampir habis..." },
+            { speaker: "Boss", text: "Sekarang giliran terakhirmu, bocah!" },
+            { speaker: "Nesty", text: "TIDAK! Aku tidak akan membiarkanmu menyakiti Edwin!" },
+            { speaker: "Nesty", text: "Edwin... aku mencintaimu..." }
+        ];
+
+        const victoryDialogues = [
+            { speaker: "Boss", text: "Mustahil... kekuatan cinta kalian..." },
+            { speaker: "Edwin", text: "Cinta kita memang tak terkalahkan!" },
+            { speaker: "Nesty", text: "Kita berhasil! Together we're unstoppable!" },
+            { speaker: "Edwin", text: "Oh ya Nesty... ada yang ingin aku katakan..." },
+            { speaker: "Edwin", text: "💕 SELAMAT ULANG TAHUN, CINTAKU! 💕" },
+            { speaker: "Edwin", text: "Semoga di umur 23 ini kita makin bahagia bersama!" }
+        ];
+
+        // --- FUNGSI PRELOAD GAMBAR ---
+        function preloadAndStartGame() {
+            nestyImg.onload = () => { imagesLoaded++; checkAllImagesLoaded(); };
+            nestyImg.onerror = () => { console.log('Gagal memuat nesty.jpg'); imagesLoaded++; checkAllImagesLoaded(); };
+            nestyImg.src = 'nesty.jpg';
+            edwinImg.onload = () => { imagesLoaded++; checkAllImagesLoaded(); };
+            edwinImg.onerror = () => { console.log('Gagal memuat edwin.jpg'); imagesLoaded++; checkAllImagesLoaded(); };
+            edwinImg.src = 'edwin.jpg';
         }
+
+        function checkAllImagesLoaded() {
+            if (imagesLoaded >= totalImages) {
+                initializeGame();
+            }
+        }
+
+        // --- FUNGSI MENGGAMBAR KARAKTER ---
+        function drawPlayer(p) {
+            if (nestyImg.complete && nestyImg.naturalWidth > 0) {
+                ctx.drawImage(nestyImg, p.x, p.y, p.width, p.height);
+            } else {
+                ctx.fillStyle = '#FF69B4'; ctx.fillRect(p.x, p.y, p.width, p.height);
+                ctx.fillStyle = '#4B0082'; ctx.fillRect(p.x - 5, p.y, p.width + 10, 15);
+                ctx.fillStyle = '#FFF'; ctx.fillRect(p.x + 8, p.y + 15, 8, 6); ctx.fillRect(p.x + 24, p.y + 15, 8, 6);
+                ctx.fillStyle = '#000'; ctx.fillRect(p.x + 10, p.y + 16, 4, 4); ctx.fillRect(p.x + 26, p.y + 16, 4, 4);
+                ctx.fillStyle = '#FF1493'; ctx.fillRect(p.x + 12, p.y + 25, 16, 3);
+            }
+        }
+
+        function drawEdwin(a) {
+            ctx.save();
+            if (a.direction === -1) { ctx.scale(-1, 1); ctx.translate(-a.width, 0); }
+            const drawX = a.direction === -1 ? -a.x : a.x;
+            if (edwinImg.complete && edwinImg.naturalWidth > 0) {
+                if (a.hurt) { ctx.globalAlpha = 0.5; ctx.filter = 'brightness(0.5)'; }
+                ctx.drawImage(edwinImg, drawX, a.y, a.width, a.height);
+            } else {
+                if (a.hurt) ctx.fillStyle = '#FF4444'; else ctx.fillStyle = '#4169E1';
+                ctx.fillRect(drawX, a.y, a.width, a.height);
+                ctx.fillStyle = '#2F4F4F'; ctx.fillRect(drawX, a.y, a.width, 12);
+                ctx.fillStyle = '#FFF'; ctx.fillRect(drawX + 8, a.y + 12, 6, 6); ctx.fillRect(drawX + 22, a.y + 12, 6, 6);
+                ctx.fillStyle = '#000'; ctx.fillRect(drawX + 10, a.y + 14, 2, 2); ctx.fillRect(drawX + 24, a.y + 14, 2, 2);
+                ctx.fillStyle = '#000'; ctx.fillRect(drawX + 12, a.y + 22, 12, 2);
+            }
+            ctx.restore();
+        }
+
+        function drawEnemy(e) {
+            ctx.fillStyle = '#8B0000'; ctx.fillRect(e.x, e.y, e.width, e.height);
+            ctx.fillStyle = '#FF0000'; ctx.fillRect(e.x + 5, e.y + 8, 6, 6); ctx.fillRect(e.x + 20, e.y + 8, 6, 6);
+        }
+
+        function drawBoss(b) {
+            ctx.fillStyle = '#800080'; ctx.fillRect(b.x, b.y, b.width, b.height);
+            ctx.fillStyle = '#FF0000'; ctx.fillRect(b.x + 10, b.y + 15, 12, 8); ctx.fillRect(b.x + 50, b.y + 15, 12, 8);
+            ctx.fillStyle = '#000'; ctx.fillRect(b.x + 20, b.y + 50, 40, 8);
+            ctx.strokeStyle = '#4B0082'; ctx.lineWidth = 3; ctx.strokeRect(b.x - 5, b.y - 5, b.width + 10, b.height + 10);
+        }
+
+        function createLaser(startX, startY, endX, endY) {
+            const laser = document.createElement('div');
+            laser.className = 'laser-beam';
+            const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+            const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+            laser.style.width = length + 'px'; laser.style.left = startX + 'px'; laser.style.top = startY + 'px';
+            laser.style.transformOrigin = '0 50%'; laser.style.transform = `rotate(${angle}deg)`;
+            gameContainer.appendChild(laser);
+            setTimeout(() => laser.remove(), 300);
+        }
+
+        function createKamehamehaBeam(startX, startY, endX, endY, isPlayer = true) {
+            const beam = document.createElement('div');
+            beam.className = `kamehameha-beam ${isPlayer ? 'player' : 'boss'}`;
+            const length = Math.abs(endX - startX);
+            beam.style.width = length + 'px'; beam.style.left = Math.min(startX, endX) + 'px'; beam.style.top = startY - 15 + 'px';
+            gameContainer.appendChild(beam);
+            return beam;
+        }
+
+        function createKissEffect(x, y) {
+            const kiss = document.createElement('div');
+            kiss.className = 'kiss-effect'; kiss.textContent = '💋💕';
+            kiss.style.left = x + 'px'; kiss.style.top = y + 'px';
+            gameContainer.appendChild(kiss);
+            setTimeout(() => kiss.remove(), 2000);
+        }
+
+        // --- LOGIKA GAME ---
+        function initializeGame() {
+            mainContent.style.display = 'none'; gameContainer.style.display = 'block';
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            setupControls();
+            gameScore = 0; gameLives = 3; currentLevel = 0;
+            loadLevel(currentLevel);
+            startGameLoop();
+        }
+
+        function restartGame() {
+            gameScore = 0; gameLives = 3; currentLevel = 0;
+            loadLevel(currentLevel);
+            startGameLoop();
+        }
+
+        function loadLevel(levelIndex) {
+            const levelData = levels[levelIndex];
+            const groundY = canvas.height - 40;
+            player = { x: 100, y: groundY - 100, width: 40, height: 50, velX: 0, velY: 0, speed: 6, jumpPower: 18, grounded: false };
+            platforms = [ { x: 0, y: groundY, width: canvas.width * 2, height: 40, color: '#8B4513' }, ...levelData.platforms.map(p => ({ ...p, y: groundY + p.y, height: 20, color: '#2E8B57' })) ];
+            coins = levelData.coins.map(c => ({ ...c, y: groundY + c.y, width: 25, height: 25, collected: false, color: '#FFD700' }));
+            enemies = levelData.enemies.map(e => ({ ...e, y: groundY + e.y, width: 35, height: 35, alive: true }));
+
+            if (levelData.type === 'final') {
+                boss = { ...levelData.boss, y: groundY + levelData.boss.y, alive: true, attackTimer: 0 };
+                allies = [{ ...levelData.ally, y: groundY + levelData.ally.y, velX: 0, velY: 0, speed: 4, grounded: false, attacking: false, attackTimer: 0, hurt: false, direction: 1 }];
+                bossHpContainer.style.display = 'block';
+                finalStageStep = 0; currentDialogue = 0; dialogueTimer = 0;
+                edwinHp = 100; kamehamehaActive = false; playerPower = 0; bossPower = 50;
+                updateBossHP();
+            } else {
+                boss = null; allies = []; bossHpContainer.style.display = 'none';
+            }
+            updateUI();
+        }
+
+        function startGameLoop() {
+            if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
+            messageOverlay.style.display = 'none';
+            gameState = 'playing';
+            gameLoop();
+        }
+
+        function gameLoop() {
+            if (gameState !== 'playing') return;
+            update();
+            draw();
+            gameAnimationId = requestAnimationFrame(gameLoop);
+        }
+
+        function update() {
+            if (kamehamehaActive) { updateKamehameha(); return; }
+
+            // Player movement only if not in dialogue
+            if (document.querySelector('.dialogue-box') === null) {
+                if (keys['ArrowLeft'] || keys['KeyA']) player.velX = -player.speed;
+                else if (keys['ArrowRight'] || keys['KeyD']) player.velX = player.speed;
+                else player.velX *= 0.8;
+                if ((keys['Space'] || keys['ArrowUp'] || keys['KeyW']) && player.grounded) { player.velY = -player.jumpPower; player.grounded = false; }
+            } else {
+                player.velX = 0;
+            }
+
+            player.velY += gravity; player.x += player.velX; player.y += player.velY;
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width > platforms[0].width) player.x = platforms[0].width - player.width;
+
+            player.grounded = false;
+            for (const p of platforms) {
+                if (checkCollision(player, p) && player.velY >= 0 && player.y + player.height - player.velY <= p.y) {
+                    player.y = p.y - player.height; player.velY = 0; player.grounded = true;
+                }
+            }
+
+            if (levels[currentLevel].type === 'final') { updateFinalStage(); }
+            else { updateRegularStage(); }
+            if (player.y > canvas.height) playerHit();
+        }
+
+        function updateRegularStage() {
+            for (const coin of coins) {
+                if (!coin.collected && checkCollision(player, coin)) { coin.collected = true; gameScore += 100; updateUI(); }
+            }
+            for (const enemy of enemies) {
+                if (!enemy.alive) continue;
+                enemy.x += enemy.speed;
+                if (enemy.x < 0 || enemy.x + enemy.width > platforms[0].width) { enemy.speed *= -1; }
+                if (checkCollision(player, enemy)) {
+                    if (player.velY > 0 && player.y + player.height < enemy.y + enemy.height) {
+                        enemy.alive = false; player.velY = -10; gameScore += 200; updateUI();
+                    } else { playerHit(); }
+                }
+            }
+            const allCoinsCollected = coins.every(c => c.collected);
+            const allEnemiesDefeated = enemies.every(e => !e.alive);
+            if (allCoinsCollected && allEnemiesDefeated) { levelComplete(); }
+        }
+
+        function updateFinalStage() {
+            updateDialogue(); // Handle dialogues first
+
+            // Only run game logic if not in a dialogue-driven cutscene
+            if (finalStageStep === 2 || finalStageStep === 3) {
+                // Update Edwin
+                if (allies.length > 0) {
+                    const edwin = allies[0];
+                    const patrolLimitLeft = 210; const patrolLimitRight = 350;
+                    if (edwin.x <= patrolLimitLeft) edwin.direction = 1;
+                    if (edwin.x + edwin.width >= patrolLimitRight) edwin.direction = -1;
+                    edwin.velX = edwin.speed * 0.3 * edwin.direction;
+                    edwin.x += edwin.velX;
+                    edwin.velY += gravity; edwin.y += edwin.velY;
+                    edwin.grounded = false;
+                    for (const p of platforms) {
+                        if (checkCollision(edwin, p) && edwin.velY >= 0) { edwin.y = p.y - edwin.height; edwin.velY = 0; edwin.grounded = true; }
+                    }
+
+                    if (edwin.attackTimer <= 0) {
+                        const laserStartX = edwin.x + edwin.width / 2; const laserStartY = edwin.y + edwin.height / 2;
+                        const laserEndX = boss.x + boss.width / 2; const laserEndY = boss.y + boss.height / 2;
+                        createLaser(laserStartX, laserStartY, laserEndX, laserEndY);
+                        boss.hp -= 1; edwin.attackTimer = 40; updateBossHP();
+                    } else { edwin.attackTimer--; }
+                }
+
+                // Update Boss
+                if (boss && boss.alive) {
+                    boss.attackTimer++;
+                    if (boss.attackTimer > 100 && edwinHp > 20) {
+                        boss.attackTimer = 0;
+                        if (allies.length > 0) { edwinHp -= 10; if (edwinHp <= 20) { finalStageStep = 3; currentDialogue = 0; dialogueTimer = 0; allies[0].hurt = true; } }
+                    }
+                    if (checkCollision(player, boss)) {
+                        if (player.velY > 0 && player.y < boss.y + boss.height / 2) { boss.hp -= 2; player.velY = -15; updateBossHP(); }
+                    }
+                }
+            }
+        }
+
+        function startKamehameha() {
+            kamehamehaActive = true; kamehamehaUI.style.display = 'flex';
+            playerPower = 10; bossPower = 40; kamehamehaTimer = 0;
+            document.querySelectorAll('.kamehameha-beam').forEach(e => e.remove());
+            if (allies.length > 0 && boss) {
+                const beamY = allies[0].y + allies[0].height / 2;
+                kamehamehaBeams.player = createKamehamehaBeam(allies[0].x + allies[0].width, beamY, boss.x, beamY, true);
+                kamehamehaBeams.boss = createKamehamehaBeam(boss.x, beamY, allies[0].x + allies[0].width, beamY, false);
+            }
+        }
+
+        function updateKamehameha() {
+            kamehamehaTimer++;
+            // --- REBALANCED --- Boss power increases slower
+            bossPower += 0.18;
+            if (bossPower > 100) bossPower = 100;
+            if (playerPower > 100) playerPower = 100;
+            document.getElementById('player-power-bar').style.width = playerPower + '%';
+            document.getElementById('boss-power-bar').style.width = bossPower + '%';
+
+            if (kamehamehaTimer > 400) {
+                kamehamehaActive = false;
+                document.querySelectorAll('.kamehameha-beam').forEach(e => e.remove());
+                // --- FIXED --- Win condition is now >= (greater than or equal to)
+                if (playerPower >= bossPower) { kamehamehaWin(); }
+                else { kamehamehaLose(); }
+            }
+        }
+
+        function kamehamehaWin() {
+            kamehamehaUI.style.display = 'none'; boss.alive = false; boss.hp = 0;
+            finalStageStep = 6; // Victory phase
+            currentDialogue = 0; dialogueTimer = 0;
+        }
+
+        function kamehamehaLose() {
+            kamehamehaUI.style.display = 'none';
+            showGameMessage('KAMEHAMEHA KALAH!<br><br>Coba lagi dengan lebih semangat!', 'COBA LAGI', () => {
+                messageOverlay.style.display = 'none';
+                setTimeout(startKamehameha, 500);
+            });
+        }
+
+        // --- REVISED DIALOGUE LOGIC ---
+        function updateDialogue() {
+            let currentDialogues;
+            if (finalStageStep === 0) currentDialogues = finalDialogues;
+            else if (finalStageStep === 3) currentDialogues = criticalDialogues;
+            else if (finalStageStep === 6) currentDialogues = victoryDialogues;
+            else return; // No dialogues for this step
+
+            if (currentDialogue >= currentDialogues.length) {
+                // Dialogue sequence finished, transition to the next step
+                if (finalStageStep === 0) { finalStageStep = 2; } // Start battle
+                else if (finalStageStep === 3) {
+                    finalStageStep = 4; // Kiss scene
+                    if (allies.length > 0) createKissEffect(allies[0].x, allies[0].y - 20);
+                    setTimeout(() => { finalStageStep = 5; startKamehameha(); }, 3000);
+                }
+                else if (finalStageStep === 6) { // Victory dialogue finished
+                    finalStageStep = 7; // End state
+                    endGameSequence();
+                }
+                currentDialogue = 0; // Reset for next sequence
+                return;
+            }
+
+            dialogueTimer++;
+            if (dialogueTimer === 1) { // Show dialogue on the first frame of this line
+                showDialogue(currentDialogues[currentDialogue]);
+            }
+            if (dialogueTimer > 200) { // Display each line for ~3.3 seconds
+                currentDialogue++;
+                dialogueTimer = 0;
+                removeDialogue();
+            }
+        }
+
+        function endGameSequence() {
+            gameState = 'win';
+            setTimeout(() => {
+                gameContainer.style.display = 'none';
+                achievementPopup.style.display = 'block';
+            }, 1000);
+        }
+
+        function showDialogue(dialogue) {
+            removeDialogue();
+            const box = document.createElement('div');
+            box.className = 'dialogue-box';
+            box.innerHTML = `<strong>${dialogue.speaker}:</strong><br>${dialogue.text}`;
+            dialogueContainer.appendChild(box);
+        }
+
+        function removeDialogue() {
+            const box = document.querySelector('.dialogue-box');
+            if (box) box.remove();
+        }
+
+        function updateBossHP() {
+            if (boss) {
+                const percentage = (boss.hp / boss.maxHp) * 100;
+                bossHpFill.style.width = Math.max(0, percentage) + '%';
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            if (levels[currentLevel].type === 'final') {
+                if (kamehamehaActive) { gradient.addColorStop(0, '#FF1493'); gradient.addColorStop(0.5, '#8B008B'); gradient.addColorStop(1, '#4B0082'); }
+                else { gradient.addColorStop(0, '#2C1810'); gradient.addColorStop(1, '#8B0000'); }
+            } else { gradient.addColorStop(0, '#87CEEB'); gradient.addColorStop(1, '#98FB98'); }
+            ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            let camX = -player.x + canvas.width / 2;
+            camX = Math.min(0, Math.max(camX, canvas.width - platforms[0].width));
+            ctx.translate(camX, 0);
+
+            platforms.forEach(p => { ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.width, p.height); });
+            coins.forEach(c => { if (!c.collected) { ctx.fillStyle = c.color; ctx.fillRect(c.x, c.y, c.width, c.height); } });
+            enemies.forEach(e => { if (e.alive) drawEnemy(e); });
+            allies.forEach(a => drawEdwin(a));
+            if (boss && boss.alive) drawBoss(boss);
+            drawPlayer(player);
+            ctx.restore();
+        }
+
+        function checkCollision(obj1, obj2) {
+            return obj1.x < obj2.x + obj2.width && obj1.x + obj1.width > obj2.x && obj1.y < obj2.y + obj2.height && obj1.y + obj1.height > obj2.y;
+        }
+
+        function playerHit() {
+            if (gameState !== 'playing') return;
+            gameLives--; updateUI();
+            if (gameLives <= 0) { gameOver(); }
+            else { gameState = 'paused'; setTimeout(() => { loadLevel(currentLevel); startGameLoop(); }, 1000); }
+        }
+
+        function levelComplete() {
+            gameState = 'paused'; currentLevel++;
+            if (currentLevel >= levels.length) { gameWin(); }
+            else { showGameMessage(`LEVEL ${currentLevel} SELESAI!<br><br>SKOR BONUS: +500`, "LANJUT", () => { gameScore += 500; loadLevel(currentLevel); startGameLoop(); }); }
+        }
+
+        function gameOver() {
+            gameState = 'over';
+            showGameMessage('GAME OVER!<br><br>Jangan menyerah! Coba lagi!', "RESTART", restartGame);
+        }
+
+        function gameWin() {
+            gameState = 'win';
+            const finalMessage = `SELAMAT!<br>Kamu berhasil menyelesaikan semua level!<br><br>SKOR AKHIR: ${gameScore}`;
+            showGameMessage(finalMessage, "MAIN LAGI", restartGame);
+        }
+
+        function showGameMessage(message, buttonText, action) {
+            messageText.innerHTML = message; primaryActionBtn.textContent = buttonText;
+            messageOverlay.style.display = 'flex';
+            primaryActionBtn.onclick = () => { if (action) action(); };
+        }
+
+        function updateUI() {
+            scoreEl.textContent = gameScore; levelEl.textContent = currentLevel + 1; livesEl.textContent = gameLives;
+            if (coins) { coinsCollectedEl.textContent = coins.filter(c => c.collected).length; totalCoinsEl.textContent = coins.length; }
+        }
+
+        function closeGame() {
+            if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
+            gameContainer.style.display = 'none'; mainContent.style.display = 'block';
+            gameState = 'inactive'; bossHpContainer.style.display = 'none'; kamehamehaUI.style.display = 'none';
+            removeDialogue();
+        }
+
+        function setupControls() {
+            keys = {};
+            document.removeEventListener('keydown', handleKeyDown); document.removeEventListener('keyup', handleKeyUp);
+            document.addEventListener('keydown', handleKeyDown); document.addEventListener('keyup', handleKeyUp);
+            const leftBtn = document.getElementById('left-btn'); const rightBtn = document.getElementById('right-btn'); const jumpBtn = document.getElementById('jump-btn');
+            const mobileKeyListener = (key, isDown) => (e) => { e.preventDefault(); keys[key] = isDown; };
+            leftBtn.ontouchstart = leftBtn.onmousedown = mobileKeyListener('ArrowLeft', true); leftBtn.ontouchend = leftBtn.onmouseup = mobileKeyListener('ArrowLeft', false);
+            rightBtn.ontouchstart = rightBtn.onmousedown = mobileKeyListener('ArrowRight', true); rightBtn.ontouchend = rightBtn.onmouseup = mobileKeyListener('ArrowRight', false);
+            jumpBtn.ontouchstart = jumpBtn.onmousedown = mobileKeyListener('Space', true); jumpBtn.ontouchend = jumpBtn.onmouseup = mobileKeyListener('Space', false);
+            document.removeEventListener('click', handleKamehamehaClick); document.removeEventListener('touchstart', handleKamehamehaClick);
+            document.addEventListener('click', handleKamehamehaClick); document.addEventListener('touchstart', handleKamehamehaClick);
+        }
+
+        function handleKamehamehaClick(e) {
+            if (kamehamehaActive) { e.preventDefault(); playerPower = Math.min(100, playerPower + 4); }
+        }
+
+        function handleKeyDown(e) {
+            if (gameState === 'playing' && e.code === 'Space') e.preventDefault();
+            keys[e.code] = true;
+            if (kamehamehaActive && e.code === 'Space') { playerPower = Math.min(100, playerPower + 4); }
+        }
+
+        function handleKeyUp(e) { keys[e.code] = false; }
+
+        window.addEventListener('resize', () => {
+            if (gameState === 'inactive') return;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            if (platforms && platforms.length > 0) { platforms[0].width = canvas.width * 2; }
+        });
+
+        mainMenuBtn.addEventListener('click', closeGame);
     </script>
 </body>
-
 </html>
